@@ -114,84 +114,95 @@
         </div>
     </div>
 
-    <script>
-        const vault = document.getElementById('vault');
-        const menuScreen = document.getElementById('menu-screen');
-        const gameContainer = document.getElementById('game-container');
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
+  <script>
+    const vault = document.getElementById('vault');
+    const menuScreen = document.getElementById('menu-screen');
+    const gameContainer = document.getElementById('game-container');
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-        // TRIGGER: SHIFT + B
-        window.addEventListener('keydown', (e) => {
-            if (e.shiftKey && e.key === 'B') {
-                e.preventDefault();
-                toggleVault();
-            }
-            if (e.key === 'Escape') {
-                vault.style.display = 'none';
-            }
-        });
+    // --- DIAGNOSTIC: REMOVE THIS ONCE WORKING ---
+    console.log("Stealth System Initialized. Press Shift + B to open.");
 
-        function toggleVault() {
-            vault.style.display = (vault.style.display === 'flex') ? 'none' : 'flex';
-            if(vault.style.display === 'flex') showMenu();
+    window.addEventListener('keydown', (e) => {
+        // We use .toLowerCase() to make sure 'b' or 'B' both work
+        if (e.shiftKey && e.key.toLowerCase() === 'b') {
+            e.preventDefault();
+            console.log("Trigger Detected: Opening Vault...");
+            toggleVault();
         }
-
-        function showMenu() {
-            menuScreen.style.display = 'block';
-            gameContainer.style.display = 'none';
-            gameRunning = false;
-        }
-
-        function startJumper() {
-            menuScreen.style.display = 'none';
-            gameContainer.style.display = 'flex';
-            resetGame();
-            if(!loopActive) gameLoop();
-        }
-
-        // --- MATHS JUMPER (FLAPPY) ---
-        let birdY, velocity, pipes, score, gameRunning = false, loopActive = false;
         
-        function resetGame() {
-            birdY = 250; velocity = 0; score = 0; pipes = [{ x: 400, gap: 200 }];
-            gameRunning = true;
+        // Instant Panic Close
+        if (e.key === 'Escape') {
+            vault.style.display = 'none';
+        }
+    });
+
+    function toggleVault() {
+        // If it's hidden, show it. If shown, hide it.
+        if (vault.style.display === 'flex') {
+            vault.style.display = 'none';
+        } else {
+            vault.style.display = 'flex';
+            showMenu();
+        }
+    }
+
+    function showMenu() {
+        menuScreen.style.display = 'block';
+        gameContainer.style.display = 'none';
+        gameRunning = false;
+    }
+
+    function startJumper() {
+        menuScreen.style.display = 'none';
+        gameContainer.style.display = 'flex';
+        resetGame();
+        if(!loopActive) gameLoop();
+    }
+
+    // --- MATHS JUMPER ENGINE ---
+    let birdY, velocity, pipes, score, gameRunning = false, loopActive = false;
+    
+    function resetGame() {
+        birdY = 250; velocity = 0; score = 0; pipes = [{ x: 400, gap: 200 }];
+        gameRunning = true;
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' || e.code === 'Numpad5') velocity = -5;
+    });
+
+    function gameLoop() {
+        loopActive = true;
+        if (!gameRunning || vault.style.display === 'none') {
+            requestAnimationFrame(gameLoop);
+            return;
         }
 
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' || e.code === 'Numpad5') velocity = -5;
+        velocity += 0.25; birdY += velocity;
+        ctx.clearRect(0,0,400,500);
+
+        ctx.fillStyle = '#00609b';
+        ctx.beginPath(); ctx.arc(50, birdY, 12, 0, Math.PI*2); ctx.fill();
+
+        ctx.fillStyle = '#94a3b8';
+        pipes.forEach((p, i) => {
+            p.x -= 2;
+            ctx.fillRect(p.x, 0, 50, p.gap);
+            ctx.fillRect(p.x, p.gap + 150, 50, 500);
+            if(p.x === 50) score++;
+            if(p.x < -50) pipes.splice(i, 1);
+            if(50 > p.x && 50 < p.x+50 && (birdY < p.gap || birdY > p.gap+150)) resetGame();
         });
 
-        function gameLoop() {
-            loopActive = true;
-            if (!gameRunning || vault.style.display === 'none') {
-                requestAnimationFrame(gameLoop);
-                return;
-            }
+        if(pipes[pipes.length-1].x < 220) pipes.push({ x: 400, gap: Math.random()*250 + 50 });
+        if(birdY > 500 || birdY < 0) resetGame();
 
-            velocity += 0.25; birdY += velocity;
-            ctx.clearRect(0,0,400,500);
-
-            ctx.fillStyle = '#00609b';
-            ctx.beginPath(); ctx.arc(50, birdY, 12, 0, Math.PI*2); ctx.fill();
-
-            ctx.fillStyle = '#94a3b8';
-            pipes.forEach((p, i) => {
-                p.x -= 2;
-                ctx.fillRect(p.x, 0, 50, p.gap);
-                ctx.fillRect(p.x, p.gap + 150, 50, 500);
-                if(p.x === 50) score++;
-                if(p.x < -50) pipes.splice(i, 1);
-                if(50 > p.x && 50 < p.x+50 && (birdY < p.gap || birdY > p.gap+150)) resetGame();
-            });
-
-            if(pipes[pipes.length-1].x < 220) pipes.push({ x: 400, gap: Math.random()*250 + 50 });
-            if(birdY > 500 || birdY < 0) resetGame();
-
-            ctx.fillStyle = '#00609b'; ctx.font = 'bold 16px sans-serif';
-            ctx.fillText('Efficiency: ' + score + '%', 20, 30);
-            requestAnimationFrame(gameLoop);
-        }
-    </script>
+        ctx.fillStyle = '#00609b'; ctx.font = 'bold 16px sans-serif';
+        ctx.fillText('Efficiency: ' + score + '%', 20, 30);
+        requestAnimationFrame(gameLoop);
+    }
+</script>
 </body>
 </html>

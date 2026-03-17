@@ -8,100 +8,53 @@
     
     <style>
         :root {
-            --sparx-blue: #00609b; /* Your requested Blue */
-            --sparx-blue-hover: #004a77;
+            --sparx-blue: #00609b;
             --sparx-light-blue: #dfecf8;
             --success-green: #27ce88;
             --text-dark: #1f2937;
+            --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
-        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: #ffffff; color: var(--text-dark); overflow-x: hidden; }
+        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: #ffffff; color: var(--text-dark); overflow: hidden; }
 
-        /* HEADER */
+        /* DASHBOARD UI */
         .top-banner {
-            background: var(--sparx-blue);
-            height: 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px;
-            color: white;
-            position: sticky; top: 0; z-index: 100;
+            background: var(--sparx-blue); height: 50px; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 25px; color: white;
         }
-        .logo-text { font-weight: 700; font-size: 1.3rem; letter-spacing: -0.5px; }
+        .logo-text { font-weight: 700; font-size: 1.3rem; }
         .banner-right { display: flex; gap: 20px; align-items: center; }
-        .xp-pill { background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; }
-        .menu-btn { border: 1px solid white; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
+        .xp-pill { background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
+        
+        .page-wrapper { display: flex; height: calc(100vh - 50px); }
+        .sidebar { width: 250px; border-right: 1px solid #e5e7eb; padding-top: 20px; }
+        .nav-item { padding: 14px 25px; color: #4b5563; font-weight: 500; cursor: pointer; border-left: 4px solid transparent; }
+        .nav-item.active { background: #f3f4f6; color: var(--sparx-blue); border-left: 4px solid var(--sparx-blue); font-weight: 700; }
+        
+        .main-content { flex-grow: 1; padding: 40px; background: linear-gradient(135deg, #ffffff 0%, var(--sparx-light-blue) 100%); }
+        .task-card { background: white; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; border-left: 8px solid var(--success-green); box-shadow: var(--card-shadow); }
 
-        /* LAYOUT */
-        .page-wrapper { display: flex; min-height: calc(100vh - 50px); }
-
-        /* SIDEBAR */
-        .sidebar {
-            width: 250px;
-            background: #ffffff;
-            border-right: 1px solid #e5e7eb;
-            padding-top: 20px;
-            flex-shrink: 0;
-        }
-        .nav-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 14px 25px;
-            color: #4b5563;
-            font-weight: 500;
-            cursor: pointer;
-            transition: 0.2s;
-            border-left: 4px solid transparent;
-        }
-        .nav-item.active {
-            background: #f3f4f6;
-            color: var(--sparx-blue);
-            border-left: 4px solid var(--sparx-blue);
-            font-weight: 700;
-        }
-        .nav-item:hover:not(.active) { background: #f9fafb; color: var(--sparx-blue); }
-
-        /* MAIN CONTENT */
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-            background: linear-gradient(135deg, #ffffff 0%, var(--sparx-light-blue) 100%);
-        }
-        .welcome-header h1 { font-size: 2rem; margin: 0 0 10px 0; }
-        .welcome-header p { color: #4b5563; max-width: 600px; margin-bottom: 30px; line-height: 1.5; }
-
-        /* TASK CARDS */
-        .task-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-            border-left: 8px solid var(--success-green);
-            margin-bottom: 15px;
-        }
-        .task-title { font-weight: 600; color: #374151; }
-        .status-badge { color: var(--success-green); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
-
-        /* SECRET VAULT */
+        /* STEALTH VAULT & MENU */
         #vault {
-            position: fixed; inset: 0; background: white; z-index: 1000;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
+            position: fixed; inset: 0; background: white; z-index: 9999;
+            display: none; flex-direction: column; align-items: center; padding-top: 50px;
         }
-        .game-window {
-            border: 3px solid var(--sparx-blue);
-            border-radius: 10px;
-            background: #f0f7ff;
-            overflow: hidden;
+        .vault-header { color: var(--sparx-blue); text-align: center; margin-bottom: 40px; }
+        
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 80%; max-width: 800px; }
+        .game-card {
+            background: white; border: 2px solid #e5e7eb; border-radius: 15px; padding: 20px;
+            cursor: pointer; transition: 0.2s; text-align: center;
         }
-        .game-bar { background: var(--sparx-blue); color: white; padding: 10px 20px; font-weight: bold; text-align: center; }
-        #gameCanvas { background: #e1eaf2; display: block; }
-        .vault-btn { 
-            background: var(--sparx-blue); color: white; border: none; 
-            padding: 10px 25px; border-radius: 20px; cursor: pointer; margin-top: 15px; font-weight: bold;
-        }
+        .game-card:hover { border-color: var(--sparx-blue); transform: translateY(-3px); box-shadow: var(--card-shadow); }
+        .game-card h3 { color: var(--sparx-blue); margin: 0 0 10px 0; }
+        .game-card p { font-size: 0.85rem; color: #6b7280; }
+
+        /* GAME CONTAINER */
+        #game-container { display: none; flex-direction: column; align-items: center; }
+        canvas { background: #e1eaf2; border: 3px solid var(--sparx-blue); border-radius: 8px; }
+        .btn { background: var(--sparx-blue); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -111,7 +64,7 @@
         <div class="banner-right">
             <div class="xp-pill">18,226 XP</div>
             <div class="student-name">O-B Cross</div>
-            <div class="menu-btn">Menu ☰</div>
+            <div class="menu-btn" style="border: 1px solid white; padding: 3px 10px; border-radius: 5px; font-size: 12px;">Menu</div>
         </div>
     </header>
 
@@ -122,71 +75,87 @@
             <div class="nav-item">Target</div>
             <div class="nav-item">Independent Learning</div>
         </aside>
-
         <main class="main-content">
-            <div class="welcome-header">
-                <h1>Hey O-B,</h1>
-                <p>This is your personalised Compulsory homework. Answer every question correctly to complete it.</p>
-            </div>
-
-            <div class="task-list">
-                <div class="task-card">
-                    <span class="task-title">Homework due Tuesday 24th March 7pm</span>
-                    <span class="status-badge">Completed ✓</span>
-                </div>
-                <div class="task-card">
-                    <span class="task-title">Homework due Tuesday 17th March 7pm</span>
-                    <span class="status-badge">Completed ✓</span>
-                </div>
+            <h1>Hey O-B,</h1>
+            <p>Answer every question correctly to complete your homework.</p>
+            <div class="task-card">
+                <span style="font-weight:600">Homework due Tuesday 24th March 7pm</span>
+                <span style="color:var(--success-green); font-weight:700">Completed ✓</span>
             </div>
         </main>
     </div>
 
     <div id="vault">
-        <div id="prep-screen" style="text-align:center;">
-            <h2 style="color:var(--sparx-blue)">GEOMETRY SIMULATION LOADED</h2>
-            <p>Verification Required: Please ensure audio is muted.</p>
-            <button class="vault-btn" onclick="launchGame()">Start Simulation</button>
-        </div>
-        <div id="game-ui" style="display:none;">
-            <div class="game-window">
-                <div class="game-bar">Module 4: Spatial Accuracy Test</div>
-                <canvas id="gameCanvas" width="400" height="500"></canvas>
+        <div id="menu-screen">
+            <div class="vault-header">
+                <h1>Advanced Learning Modules</h1>
+                <p>Select a simulation to begin independent study.</p>
             </div>
-            <center><button class="vault-btn" onclick="toggleVault()">Close Module</button></center>
+            <div class="menu-grid">
+                <div class="game-card" onclick="startJumper()">
+                    <h3>Spatial Trajectory</h3>
+                    <p>Module 4.2: Gravity and physics-based velocity calculation.</p>
+                </div>
+                <div class="game-card" style="opacity:0.6; cursor:not-allowed;">
+                    <h3>Logic Flow</h3>
+                    <p>Coming Soon: Algorithmic pathfinding modules.</p>
+                </div>
+            </div>
+            <center><button class="btn" onclick="toggleVault()" style="margin-top:50px; background:#6b7280;">Exit Modules</button></center>
+        </div>
+
+        <div id="game-container">
+            <h2 id="game-title" style="color:var(--sparx-blue)">Spatial Trajectory Simulation</h2>
+            <canvas id="gameCanvas" width="400" height="500"></canvas>
+            <div style="display:flex; gap:10px;">
+                <button class="btn" onclick="showMenu()" style="background:#6b7280;">Back to Menu</button>
+                <button class="btn" onclick="toggleVault()">Panic Exit (ESC)</button>
+            </div>
         </div>
     </div>
 
     <script>
         const vault = document.getElementById('vault');
+        const menuScreen = document.getElementById('menu-screen');
+        const gameContainer = document.getElementById('game-container');
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // NEW KEYBIND: LEFT CTRL + EQUALS
+        // TRIGGER: SHIFT + B
         window.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.location === 1 && e.key === '=') {
+            if (e.shiftKey && e.key === 'B') {
                 e.preventDefault();
                 toggleVault();
             }
-            if (e.key === 'Escape') vault.style.display = 'none';
+            if (e.key === 'Escape') {
+                vault.style.display = 'none';
+            }
         });
 
         function toggleVault() {
             vault.style.display = (vault.style.display === 'flex') ? 'none' : 'flex';
+            if(vault.style.display === 'flex') showMenu();
         }
 
-        function launchGame() {
-            document.getElementById('prep-screen').style.display = 'none';
-            document.getElementById('game-ui').style.display = 'block';
+        function showMenu() {
+            menuScreen.style.display = 'block';
+            gameContainer.style.display = 'none';
+            gameRunning = false;
+        }
+
+        function startJumper() {
+            menuScreen.style.display = 'none';
+            gameContainer.style.display = 'flex';
             resetGame();
-            if(!running) gameLoop();
+            if(!loopActive) gameLoop();
         }
 
-        // --- MATHS JUMPER ENGINE ---
-        let birdY, velocity, pipes, score, running = false;
+        // --- MATHS JUMPER (FLAPPY) ---
+        let birdY, velocity, pipes, score, gameRunning = false, loopActive = false;
+        
         function resetGame() {
-            birdY = 250; velocity = 0; score = 0; running = true;
-            pipes = [{ x: 400, gap: 200 }];
+            birdY = 250; velocity = 0; score = 0; pipes = [{ x: 400, gap: 200 }];
+            gameRunning = true;
         }
 
         window.addEventListener('keydown', (e) => {
@@ -194,16 +163,18 @@
         });
 
         function gameLoop() {
-            if (vault.style.display === 'none') { requestAnimationFrame(gameLoop); return; }
-            
+            loopActive = true;
+            if (!gameRunning || vault.style.display === 'none') {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+
             velocity += 0.25; birdY += velocity;
             ctx.clearRect(0,0,400,500);
 
-            // Draw Player (Blue Dot)
             ctx.fillStyle = '#00609b';
             ctx.beginPath(); ctx.arc(50, birdY, 12, 0, Math.PI*2); ctx.fill();
 
-            // Pipes (Gray Bars)
             ctx.fillStyle = '#94a3b8';
             pipes.forEach((p, i) => {
                 p.x -= 2;
@@ -211,7 +182,6 @@
                 ctx.fillRect(p.x, p.gap + 150, 50, 500);
                 if(p.x === 50) score++;
                 if(p.x < -50) pipes.splice(i, 1);
-                // Collision
                 if(50 > p.x && 50 < p.x+50 && (birdY < p.gap || birdY > p.gap+150)) resetGame();
             });
 

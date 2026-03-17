@@ -5,70 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sparx Maths</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --sparx-blue: #0073bb;
-            --sparx-light-blue: #f0f7ff;
-            --sparx-text: #1b3c59;
-            --correct-green: #34d399;
-            --bg-gray: #f9fafb;
-            --border-gray: #e5e7eb;
+            --sparx-blue: #3b82f6; /* The exact vibrant blue from your image */
+            --sparx-dark-blue: #1e3a8a;
+            --sparx-bg: #f4f7f9;
+            --sidebar-bg: #ffffff;
+            --text-dark: #1b3c59;
+            --text-gray: #6b7280;
+            --correct-green: #10b981;
+            --correct-bg: #d1fae5;
+            --border-light: #e5e7eb;
         }
 
-        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: #ffffff; color: var(--sparx-text); overflow: hidden; }
+        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: var(--sparx-bg); color: var(--text-dark); overflow: hidden; }
 
-        /* HEADER */
+        /* --- THE HEADER --- */
         .top-banner {
             background: var(--sparx-blue); height: 50px; display: flex;
             justify-content: space-between; align-items: center; padding: 0 20px;
             color: white; position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
         }
-        .logo-text { font-weight: 700; font-size: 1.4rem; }
+        .logo-text { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+        .logo-sub { font-weight: 400; font-size: 0.9rem; opacity: 0.9; }
         .banner-right { display: flex; gap: 15px; align-items: center; font-size: 0.85rem; }
-        .menu-btn { background: #3b82f6; padding: 5px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .menu-btn { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* SIDEBAR */
-        .sidebar { width: 70px; background: white; border-right: 1px solid var(--border-gray); position: fixed; top: 50px; bottom: 0; left: 0; display: flex; flex-direction: column; align-items: center; padding-top: 10px; }
-        .nav-item { width: 100%; padding: 15px 0; text-align: center; color: #4b5563; font-size: 0.6rem; cursor: pointer; border-left: 3px solid transparent; }
-        .nav-item.active { color: var(--sparx-blue); border-left-color: var(--sparx-blue); background: #f3f4f6; font-weight: 700; }
-        .nav-item i { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+        /* --- THE SIDEBAR --- */
+        .page-wrapper { display: flex; padding-top: 50px; height: 100vh; box-sizing: border-box; }
+        .sidebar { width: 85px; background: var(--sidebar-bg); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; padding-top: 5px; flex-shrink: 0; z-index: 100; }
+        .nav-item { width: 100%; padding: 15px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-gray); font-size: 0.65rem; border-left: 4px solid transparent; transition: 0.2s; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 5px; font-style: normal; }
+        .nav-item.active { color: var(--sparx-blue); border-left-color: var(--sparx-blue); background: #eff6ff; font-weight: 700; }
 
-        /* MAIN CONTENT AREA */
-        .content-area { margin-left: 70px; margin-top: 50px; height: calc(100vh - 50px); background: linear-gradient(135deg, #ffffff 0%, var(--sparx-light-blue) 100%); padding: 30px; overflow-y: auto; }
-
-        /* INDEPENDENT LEARNING MENU (IMAGE 2) */
-        .breadcrumb { font-size: 0.8rem; color: var(--sparx-blue); margin-bottom: 10px; }
+        /* --- MAIN CONTENT (INDEPENDENT LEARNING) --- */
+        .content-area { flex-grow: 1; padding: 30px 40px; overflow-y: auto; background: linear-gradient(135deg, #ffffff 0%, #edf2f7 100%); }
+        .breadcrumb { font-size: 0.9rem; color: var(--sparx-blue); margin-bottom: 15px; font-weight: 500; }
         .topic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .level-badge { background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fecaca; }
+        .level-badge { background: #fee2e2; color: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fecaca; display: flex; align-items: center; gap: 5px; }
 
-        .question-grid-container { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid var(--border-gray); }
-        .grid-row { display: grid; grid-template-columns: 100px 1fr; align-items: center; margin-bottom: 25px; }
-        .row-label { font-size: 0.8rem; font-weight: 600; color: #6b7280; text-align: center; }
-        .q-buttons { display: flex; gap: 10px; }
-        .q-box { padding: 10px 20px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: 1px solid transparent; text-align: center; min-width: 80px; }
-        .q-correct { background: #ecfdf5; color: #059669; border-color: #d1fae5; }
-        .q-answer { background: #eff6ff; color: #2563eb; border-color: #dbeafe; }
+        /* TASK GRID */
+        .task-container { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid var(--border-light); }
+        .grid-row { display: flex; align-items: center; margin-bottom: 25px; gap: 20px; }
+        .row-label { width: 90px; font-size: 0.85rem; font-weight: 600; color: var(--text-gray); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .row-label i { font-size: 1.2rem; font-style: normal; }
+        .q-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+        .q-box { padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center; min-width: 90px; border: 1px solid transparent; transition: 0.2s; }
+        .q-box:hover { filter: brightness(0.95); }
+        .q-correct { background: var(--correct-bg); color: var(--correct-green); border-color: #a7f3d0; }
+        .q-answer { background: #eff6ff; color: var(--sparx-blue); border-color: #bfdbfe; }
 
-        /* THE CLICKER VAULT */
-        #vault { position: fixed; inset: 50px 0 0 70px; background: white; z-index: 999; display: none; flex-direction: column; align-items: center; padding-top: 40px; }
-        .click-ball { width: 140px; height: 140px; background: var(--sparx-blue); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; cursor: pointer; user-select: none; }
-        .upgrade-card { background: white; border: 1px solid var(--border-gray); padding: 15px; border-radius: 10px; width: 250px; margin-top: 10px; cursor: pointer; }
-        .upgrade-card:disabled { opacity: 0.5; }
+        /* --- THE QUESTION ALIBI VIEW --- */
+        #question-view { position: fixed; top: 50px; bottom: 0; left: 0; right: 0; background: var(--sidebar-bg); z-index: 9999; display: none; flex-direction: column; }
+        .green-bar { background: #22c55e; height: 40px; display: flex; align-items: center; padding: 0 30px; color: white; font-size: 0.85rem; gap: 15px; font-weight: 600; }
+        .q-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding-top: 50px; position: relative; }
+        .bookwork-code { background: var(--sparx-dark-blue); color: white; padding: 6px 16px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; margin-bottom: 25px; }
+        
+        .ans-input { border: 2px solid #60a5fa; border-radius: 10px; width: 280px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #94a3b8; margin: 30px 0; }
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 280px; }
+        .key { background: #f3f4f6; border: none; padding: 20px 0; border-radius: 10px; font-weight: 700; color: var(--sparx-blue); cursor: pointer; font-size: 1.3rem; transition: 0.1s; }
+        .key:active { background: #e5e7eb; transform: scale(0.95); }
+        .key-submit { background: var(--sparx-blue); color: white; }
+        .key-submit:active { background: #2563eb; }
 
-        /* QUESTION VIEW (IMAGE 1) */
-        #question-view { position: fixed; inset: 50px 0 0 70px; background: white; z-index: 9999; display: none; flex-direction: column; }
-        .green-status-bar { background: var(--correct-green); height: 35px; display: flex; align-items: center; padding: 0 20px; color: white; font-size: 0.8rem; gap: 15px; }
-        .q-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .ans-input { border: 2px solid #3b82f6; border-radius: 8px; width: 220px; height: 65px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #94a3b8; margin: 20px 0; }
-        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .key { background: #f3f4f6; border: none; padding: 15px 25px; border-radius: 8px; font-weight: 700; color: var(--sparx-blue); cursor: pointer; font-size: 1.2rem; }
-        .key-blue { background: var(--sparx-blue); color: white; }
+        /* --- THE CLICKER VAULT --- */
+        #vault { position: fixed; top: 50px; bottom: 0; left: 0; right: 0; background: var(--sidebar-bg); z-index: 9998; display: none; flex-direction: column; align-items: center; padding-top: 60px; }
+        .click-ball { width: 160px; height: 160px; background: var(--sparx-blue); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; cursor: pointer; user-select: none; box-shadow: 0 10px 20px rgba(59,130,246,0.3); transition: 0.1s; margin-bottom: 40px; }
+        .click-ball:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(59,130,246,0.2); }
+        .upgrade-card { background: white; border: 2px solid var(--border-light); padding: 15px 20px; border-radius: 12px; width: 280px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .upgrade-card:hover:not(:disabled) { border-color: var(--sparx-blue); background: #eff6ff; }
+        .upgrade-card:disabled { opacity: 0.4; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <header class="top-banner">
-        <div class="logo-text">Sparx Maths</div>
+        <div class="logo-text">Sparx Maths <span class="logo-sub">Independent Learning</span></div>
         <div class="banner-right">
             <span>18,226 XP</span>
             <span>O-B Cross</span>
@@ -76,75 +89,93 @@
         </div>
     </header>
 
-    <div class="sidebar">
-        <div class="nav-item"><i>☆</i>Compulsory</div>
-        <div class="nav-item"><i>⚡</i>XP Boost</div>
-        <div class="nav-item"><i>👑</i>Target</div>
-        <div class="nav-item active" onclick="showIndependent()"><i>💡</i>Independent Learning</div>
-    </div>
+    <div class="page-wrapper">
+        <nav class="sidebar">
+            <div class="nav-item"><i>☆</i>Compulsory</div>
+            <div class="nav-item"><i>⚡</i>XP Boost</div>
+            <div class="nav-item"><i>👑</i>Target</div>
+            <div class="nav-item active"><i>💡</i>Independent<br>Learning</div>
+        </nav>
 
-    <div class="content-area">
-        <div class="breadcrumb">Independent learning > Number > <b>Subtracting</b></div>
-        <div class="topic-header">
-            <h1 style="margin: 0; font-size: 1.5rem;">Subtracting integers <span style="color: #94a3b8; font-weight: 400;">- M347</span></h1>
-            <div class="level-badge">Level 1 ✓ ★☆☆</div>
-        </div>
+        <main class="content-area">
+            <div class="breadcrumb"><u>Independent learning</u> > <u>Number</u> > <b>Subtracting</b></div>
+            <div class="topic-header">
+                <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700;">Subtracting integers <span style="color: #94a3b8; font-weight: 400;">- M347</span></h1>
+                <div class="level-badge">Level 1 <span style="color:#10b981;">✓</span> ★☆☆</div>
+            </div>
 
-        <div class="question-grid-container">
-            <h3 style="margin-top: 0; font-size: 1rem;">Subtracting whole numbers</h3>
-            <div class="grid-row">
-                <div class="row-label">Introduce</div>
-                <div class="q-buttons">
-                    <div class="q-box q-correct" onclick="openQuestion()">Question 1<br>Correct</div>
-                    <div class="q-box q-correct" onclick="openQuestion()">Question 2<br>Correct</div>
+            <div class="task-container">
+                <h3 style="margin-top: 0; font-size: 1.1rem; margin-bottom: 20px;">Subtracting whole numbers</h3>
+                
+                <div class="grid-row">
+                    <div class="row-label"><i>📊</i>Introduce</div>
+                    <div class="q-buttons">
+                        <div class="q-box q-correct" onclick="openQuestion()">Question 1<br>Correct</div>
+                        <div class="q-box q-correct" onclick="openQuestion()">Question 2<br>Correct</div>
+                        <div class="q-box q-correct" onclick="openQuestion()">Question 3<br>Correct</div>
+                    </div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="row-label"><i>📈</i>Strengthen</div>
+                    <div class="q-buttons">
+                        <div class="q-box q-answer" onclick="openQuestion()">Question 1<br>Answer</div>
+                        <div class="q-box q-answer" onclick="openQuestion()">Question 2<br>Answer</div>
+                    </div>
                 </div>
             </div>
-            <div class="grid-row">
-                <div class="row-label">Strengthen</div>
-                <div class="q-buttons">
-                    <div class="q-box q-answer" onclick="openQuestion()">Question 1<br>Answer</div>
-                    <div class="q-box q-answer" onclick="openQuestion()">Question 2<br>Answer</div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <div id="vault">
-        <h2 style="color: var(--sparx-blue)">System Resource Allocation</h2>
-        <div id="score-label" style="font-size: 1.5rem; font-weight: 700;">Points: 0</div>
-        <div class="click-ball" onclick="doClick()">PROCESS</div>
+        <h2 style="color: var(--text-dark); margin-bottom: 5px;">Data Extraction Protocol</h2>
+        <div id="score-label" style="font-size: 2rem; font-weight: 700; color: var(--sparx-blue); margin-bottom: 30px;">Points: 0</div>
+        
+        <div class="click-ball" onclick="doClick()">EXTRACT</div>
+        
         <div style="margin-top: 20px;">
             <button class="upgrade-card" id="up1" onclick="buyUpgrade(10, 1, 0)">
-                <b>Enhanced CPU</b><br><small>Cost: 10 | +1 Per Click</small>
+                <div><b>Manual Override</b><br><small style="color:var(--text-gray);">+1 Per Click</small></div>
+                <div style="font-weight:700; color:var(--sparx-blue);">10 Pts</div>
             </button>
             <button class="upgrade-card" id="up2" onclick="buyUpgrade(50, 0, 1)">
-                <b>Auto-Routine</b><br><small>Cost: 50 | +1 Per Sec</small>
+                <div><b>Auto Sequence</b><br><small style="color:var(--text-gray);">+1 Per Sec</small></div>
+                <div style="font-weight:700; color:var(--sparx-blue);">50 Pts</div>
             </button>
         </div>
     </div>
 
     <div id="question-view">
-        <div class="green-status-bar">
-            <span>1A ✓</span><span>1B ✓</span><span>Summary</span>
+        <div class="green-bar">
+            <span>1A ✓</span><span>1B ✓</span><span style="opacity: 0.8;">Summary</span>
         </div>
         <div class="q-content">
-            <div style="background:#1b3c59; color:white; padding: 4px 12px; border-radius:4px; font-size: 0.7rem; margin-bottom: 20px;">Bookwork code: 1A</div>
-            <h2 style="font-size: 2.2rem; font-weight: 400; margin: 0;">Work out <span id="math-q">67 − 14</span></h2>
+            <div class="bookwork-code">Bookwork code: 1A</div>
+            <h2 style="font-size: 2.5rem; font-weight: 400; margin: 0;">Work out <span style="font-family: serif; margin-left:5px;">67 − 14</span></h2>
+            
             <div class="ans-input" id="ans-box">Enter number</div>
+            
             <div class="numpad">
-                <button class="key" onclick="press(7)">7</button><button class="key" onclick="press(8)">8</button><button class="key" onclick="press(9)">9</button>
-                <button class="key" onclick="press(4)">4</button><button class="key" onclick="press(5)">5</button><button class="key" onclick="press(6)">6</button>
-                <button class="key" onclick="press(1)">1</button><button class="key" onclick="press(2)">2</button><button class="key" onclick="press(3)">3</button>
+                <button class="key" onclick="press(7)">7</button>
+                <button class="key" onclick="press(8)">8</button>
+                <button class="key" onclick="press(9)">9</button>
+                <button class="key" onclick="press(4)">4</button>
+                <button class="key" onclick="press(5)">5</button>
+                <button class="key" onclick="press(6)">6</button>
+                <button class="key" onclick="press(1)">1</button>
+                <button class="key" onclick="press(2)">2</button>
+                <button class="key" onclick="press(3)">3</button>
                 <button class="key" style="grid-column: span 2" onclick="press(0)">0</button>
-                <button class="key key-blue" onclick="submit()">✓</button>
+                <button class="key key-submit" onclick="submitAns()">✓</button>
             </div>
-            <button onclick="closeQuestion()" style="margin-top: 20px; border: 1px solid #ccc; background: none; padding: 5px 20px; border-radius: 20px; color: #6b7280; cursor: pointer;">Back</button>
+            
+            <button onclick="closeQuestion()" style="margin-top: 25px; border: 1px solid #ccc; background: white; padding: 8px 30px; border-radius: 20px; color: var(--text-gray); cursor: pointer; font-weight: 600;">Back</button>
         </div>
     </div>
 
     <script>
         let points = 0; let pClick = 1; let pSec = 0;
-        let typed = ""; let currentTarget = 53;
+        let typed = ""; let currentTarget = "53";
         let nextC = 0; let nextA = 0;
 
         ///////////////////////////////////////////////////////////////
@@ -153,36 +184,53 @@
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
 
+        // Mastermind Triggers
         window.addEventListener('keydown', (e) => {
+            // SHIFT + B: Toggle Game Vault
             if (e.shiftKey && e.key.toLowerCase() === 'b') {
                 vault.style.display = (vault.style.display === 'flex') ? 'none' : 'flex';
+                document.getElementById('question-view').style.display = 'none'; // Hide math if open
             }
+            // ESC: Instant Panic Hide everything
             if (e.key === 'Escape') {
                 vault.style.display = 'none';
                 document.getElementById('question-view').style.display = 'none';
             }
-            if (e.altKey && e.key.toLowerCase() === 's') { applyUp(); }
+            // ALT + S: Secret Skip Upgrade
+            if (e.altKey && e.key.toLowerCase() === 's') { 
+                applyUp(); 
+            }
         });
 
-        function doClick() { points += pClick; update(); }
+        // Clicker Logic
+        function doClick() { 
+            points += pClick; 
+            update(); 
+        }
 
+        // Shop Logic
         function buyUpgrade(cost, c, a) {
             if (points >= cost) {
-                points -= cost; nextC = c; nextA = a;
-                openQuestion();
+                points -= cost; 
+                nextC = c; 
+                nextA = a;
+                openQuestion(); // Force the math question
             }
         }
 
         function applyUp() {
-            pClick += nextC; pSec += nextA;
+            pClick += nextC; 
+            pSec += nextA;
             nextC = 0; nextA = 0;
             document.getElementById('question-view').style.display = 'none';
             update();
         }
 
+        // Math Overlay Logic
         function openQuestion() {
             document.getElementById('question-view').style.display = 'flex';
-            typed = ""; document.getElementById('ans-box').innerText = "Enter number";
+            typed = ""; 
+            document.getElementById('ans-box').innerText = "Enter number";
             document.getElementById('ans-box').style.color = "#94a3b8";
         }
 
@@ -192,20 +240,41 @@
             document.getElementById('ans-box').style.color = "#1b3c59";
         }
 
-        function submit() {
-            if (typed == "53") { applyUp(); }
-            else { typed = ""; document.getElementById('ans-box').innerText = "Retry"; }
+        function submitAns() {
+            if (typed === currentTarget) { 
+                applyUp(); 
+            } else { 
+                typed = ""; 
+                document.getElementById('ans-box').innerText = "Incorrect"; 
+                document.getElementById('ans-box').style.color = "#ef4444";
+            }
         }
 
-        function closeQuestion() { document.getElementById('question-view').style.display = 'none'; }
+        function closeQuestion() { 
+            document.getElementById('question-view').style.display = 'none'; 
+            // If they back out without answering, refund points and cancel upgrade
+            if (nextC > 0 || nextA > 0) {
+                if (nextC === 1) points += 10;
+                if (nextA === 1) points += 50;
+                nextC = 0; nextA = 0;
+                update();
+            }
+        }
 
+        // UI Updater
         function update() {
             document.getElementById('score-label').innerText = "Points: " + Math.floor(points);
             document.getElementById('up1').disabled = (points < 10);
             document.getElementById('up2').disabled = (points < 50);
         }
 
-        setInterval(() => { if(pSec > 0) { points += pSec/10; update(); } }, 100);
+        // Auto-clicker Loop
+        setInterval(() => { 
+            if(pSec > 0) { 
+                points += pSec / 10; 
+                update(); 
+            } 
+        }, 100);
 
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////

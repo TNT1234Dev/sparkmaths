@@ -8,239 +8,319 @@
     
     <style>
         :root {
-            --sparx-blue: #3b82f6; /* The exact vibrant blue from your image */
+            /* EXACT COLOR MATCHING */
+            --sparx-blue: #3b82f6; 
             --sparx-dark-blue: #1e3a8a;
             --sparx-bg: #f4f7f9;
             --sidebar-bg: #ffffff;
-            --text-dark: #1b3c59;
-            --text-gray: #6b7280;
-            --correct-green: #10b981;
-            --correct-bg: #d1fae5;
+            --text-main: #1b3c59;
+            --text-muted: #6b7280;
+            --nav-text: #4b5563;
+            --correct-green-bg: #d1fae5;
+            --correct-green-border: #86efac;
+            --correct-green-text: #059669;
+            --answer-blue-bg: #eff6ff;
+            --answer-blue-border: #bfdbfe;
+            --answer-blue-text: #2563eb;
+            --numpad-bg: #eef2f6;
             --border-light: #e5e7eb;
         }
 
-        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: var(--sparx-bg); color: var(--text-dark); overflow: hidden; }
+        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: var(--sparx-bg); color: var(--text-main); overflow: hidden; }
 
-        /* --- THE HEADER --- */
+        /* --- TOP BANNER --- */
         .top-banner {
             background: var(--sparx-blue); height: 50px; display: flex;
             justify-content: space-between; align-items: center; padding: 0 20px;
             color: white; position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
         }
-        .logo-text { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
-        .logo-sub { font-weight: 400; font-size: 0.9rem; opacity: 0.9; }
-        .banner-right { display: flex; gap: 15px; align-items: center; font-size: 0.85rem; }
-        .menu-btn { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 6px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-text { font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; }
+        .logo-sub { font-weight: 400; font-size: 0.85rem; opacity: 0.9; margin-top: 2px;}
+        .banner-right { display: flex; gap: 20px; align-items: center; font-size: 0.85rem; font-weight: 500; }
+        
+        /* Bell Icon SVG */
+        .bell-icon { width: 18px; height: 18px; fill: none; stroke: white; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .menu-btn { display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer; }
+        .menu-btn svg { width: 16px; height: 16px; fill: none; stroke: white; stroke-width: 2; }
 
-        /* --- THE SIDEBAR --- */
+        /* --- SIDEBAR --- */
         .page-wrapper { display: flex; padding-top: 50px; height: 100vh; box-sizing: border-box; }
         .sidebar { width: 85px; background: var(--sidebar-bg); border-right: 1px solid var(--border-light); display: flex; flex-direction: column; align-items: center; padding-top: 5px; flex-shrink: 0; z-index: 100; }
-        .nav-item { width: 100%; padding: 15px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--text-gray); font-size: 0.65rem; border-left: 4px solid transparent; transition: 0.2s; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 5px; font-style: normal; }
+        
+        .nav-item { width: 100%; padding: 12px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--nav-text); font-size: 0.65rem; border-left: 4px solid transparent; transition: 0.1s; }
+        .nav-item svg { width: 22px; height: 22px; margin-bottom: 6px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
         .nav-item.active { color: var(--sparx-blue); border-left-color: var(--sparx-blue); background: #eff6ff; font-weight: 700; }
+        .nav-item.active svg { stroke-width: 2; }
 
-        /* --- MAIN CONTENT (INDEPENDENT LEARNING) --- */
-        .content-area { flex-grow: 1; padding: 30px 40px; overflow-y: auto; background: linear-gradient(135deg, #ffffff 0%, #edf2f7 100%); }
-        .breadcrumb { font-size: 0.9rem; color: var(--sparx-blue); margin-bottom: 15px; font-weight: 500; }
-        .topic-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .level-badge { background: #fee2e2; color: #ef4444; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; border: 1px solid #fecaca; display: flex; align-items: center; gap: 5px; }
+        /* --- MAIN DASHBOARD (INDEPENDENT LEARNING) --- */
+        #view-dashboard { flex-grow: 1; padding: 25px 40px; overflow-y: auto; display: block; }
+        .breadcrumb { font-size: 0.85rem; color: var(--sparx-blue); margin-bottom: 20px; font-weight: 500; }
+        .breadcrumb span { text-decoration: underline; cursor: pointer; }
+        .breadcrumb b { color: var(--text-main); text-decoration: none; }
+        
+        .topic-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; }
+        .topic-title { margin: 0; font-size: 1.7rem; font-weight: 700; color: var(--text-main); }
+        .topic-title span { color: #9ca3af; font-weight: 400; font-size: 1.5rem;}
+        .level-badge { background: #fee2e2; color: #ef4444; padding: 3px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; border: 1px solid #fecaca; display: flex; align-items: center; gap: 4px; }
+        .level-badge svg { width: 12px; height: 12px; stroke: #10b981; stroke-width: 3; }
 
-        /* TASK GRID */
-        .task-container { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid var(--border-light); }
+        .task-card { background: white; border-radius: 8px; padding: 25px; border: 1px solid var(--border-light); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .task-card h3 { margin-top: 0; font-size: 1rem; margin-bottom: 25px; color: var(--text-main); }
+        
         .grid-row { display: flex; align-items: center; margin-bottom: 25px; gap: 20px; }
-        .row-label { width: 90px; font-size: 0.85rem; font-weight: 600; color: var(--text-gray); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .row-label i { font-size: 1.2rem; font-style: normal; }
-        .q-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
-        .q-box { padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center; min-width: 90px; border: 1px solid transparent; transition: 0.2s; }
-        .q-box:hover { filter: brightness(0.95); }
-        .q-correct { background: var(--correct-bg); color: var(--correct-green); border-color: #a7f3d0; }
-        .q-answer { background: #eff6ff; color: var(--sparx-blue); border-color: #bfdbfe; }
+        .row-icon-container { width: 90px; display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+        
+        /* Bar Chart Icons (CSS only, no emojis) */
+        .bar-icon { display: flex; align-items: flex-end; gap: 3px; height: 20px; }
+        .bar-icon div { width: 6px; background: #cbd5e1; border-radius: 2px 2px 0 0; }
+        .bar-icon .b1 { height: 8px; } .bar-icon .b2 { height: 14px; } .bar-icon .b3 { height: 20px; background: #10b981; }
+        .bar-icon-blue .b3 { background: #94a3b8; }
 
-        /* --- THE QUESTION ALIBI VIEW --- */
-        #question-view { position: fixed; top: 50px; bottom: 0; left: 0; right: 0; background: var(--sidebar-bg); z-index: 9999; display: none; flex-direction: column; }
-        .green-bar { background: #22c55e; height: 40px; display: flex; align-items: center; padding: 0 30px; color: white; font-size: 0.85rem; gap: 15px; font-weight: 600; }
-        .q-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding-top: 50px; position: relative; }
+        .q-buttons { display: flex; gap: 15px; flex-wrap: wrap; }
+        .q-box { padding: 10px 15px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; text-align: center; min-width: 90px; border: 1px solid transparent; }
+        .q-correct { background: var(--correct-green-bg); color: var(--correct-green-text); border-color: var(--correct-green-border); }
+        .q-answer { background: var(--answer-blue-bg); color: var(--answer-blue-text); border-color: var(--answer-blue-border); }
+
+        /* --- QUESTION VIEW (THE ALIBI) --- */
+        #view-question { flex-grow: 1; display: none; flex-direction: column; background: var(--sparx-bg); }
+        .green-bar { background: #10b981; height: 35px; display: flex; align-items: center; padding: 0 30px; color: white; font-size: 0.85rem; gap: 15px; font-weight: 600; }
+        .green-tab { display: flex; align-items: center; gap: 5px; }
+        .green-tab svg { width: 12px; height: 12px; stroke: white; stroke-width: 3; }
+        
+        .q-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; padding-top: 40px; background: white; margin: 20px; border-radius: 8px; border: 1px solid var(--border-light); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .bookwork-code { background: var(--sparx-dark-blue); color: white; padding: 6px 16px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; margin-bottom: 25px; }
         
-        .ans-input { border: 2px solid #60a5fa; border-radius: 10px; width: 280px; height: 70px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #94a3b8; margin: 30px 0; }
-        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 280px; }
-        .key { background: #f3f4f6; border: none; padding: 20px 0; border-radius: 10px; font-weight: 700; color: var(--sparx-blue); cursor: pointer; font-size: 1.3rem; transition: 0.1s; }
-        .key:active { background: #e5e7eb; transform: scale(0.95); }
+        /* Math Font */
+        .math-text { font-family: 'Times New Roman', Times, serif; font-size: 2.5rem; letter-spacing: 2px; }
+        
+        .ans-input { border: 2px solid var(--sparx-blue); border-radius: 8px; width: 220px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #94a3b8; margin: 25px 0; }
+        
+        /* Official Sparx Numpad */
+        .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 220px; margin-bottom: 30px; }
+        .key { background: var(--numpad-bg); border: none; padding: 15px 0; border-radius: 8px; font-weight: 700; color: var(--sparx-blue); cursor: pointer; font-size: 1.3rem; transition: 0.1s; display: flex; justify-content: center; align-items: center; }
+        .key:active { transform: scale(0.95); background: #e2e8f0; }
         .key-submit { background: var(--sparx-blue); color: white; }
-        .key-submit:active { background: #2563eb; }
+        .key-submit svg { width: 20px; height: 20px; stroke: white; stroke-width: 3; fill: none; }
 
         /* --- THE CLICKER VAULT --- */
-        #vault { position: fixed; top: 50px; bottom: 0; left: 0; right: 0; background: var(--sidebar-bg); z-index: 9998; display: none; flex-direction: column; align-items: center; padding-top: 60px; }
-        .click-ball { width: 160px; height: 160px; background: var(--sparx-blue); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; cursor: pointer; user-select: none; box-shadow: 0 10px 20px rgba(59,130,246,0.3); transition: 0.1s; margin-bottom: 40px; }
-        .click-ball:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(59,130,246,0.2); }
-        .upgrade-card { background: white; border: 2px solid var(--border-light); padding: 15px 20px; border-radius: 12px; width: 280px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-        .upgrade-card:hover:not(:disabled) { border-color: var(--sparx-blue); background: #eff6ff; }
-        .upgrade-card:disabled { opacity: 0.4; cursor: not-allowed; }
+        #vault { position: fixed; inset: 50px 0 0 85px; background: var(--sparx-bg); z-index: 9998; display: none; flex-direction: column; align-items: center; padding-top: 60px; }
+        .click-ball { width: 150px; height: 150px; background: var(--sparx-blue); border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; cursor: pointer; user-select: none; box-shadow: 0 10px 20px rgba(59,130,246,0.3); transition: 0.1s; margin-bottom: 30px; border: 4px solid #bfdbfe; }
+        .click-ball:active { transform: scale(0.95); }
+        .upgrade-card { background: white; border: 1px solid var(--border-light); padding: 15px 20px; border-radius: 8px; width: 300px; margin-bottom: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .upgrade-card:hover:not(:disabled) { border-color: var(--sparx-blue); }
+        .upgrade-card:disabled { opacity: 0.4; }
     </style>
 </head>
 <body>
 
     <header class="top-banner">
-        <div class="logo-text">Sparx Maths <span class="logo-sub">Independent Learning</span></div>
+        <div class="logo-container">
+            <div class="logo-text">Sparx Maths</div>
+            <div class="logo-sub">Independent Learning</div>
+        </div>
         <div class="banner-right">
             <span>18,226 XP</span>
             <span>O-B Cross</span>
-            <div class="menu-btn">Menu ☰</div>
+            <svg class="bell-icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <div class="menu-btn">Menu <svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
         </div>
     </header>
 
     <div class="page-wrapper">
         <nav class="sidebar">
-            <div class="nav-item"><i>☆</i>Compulsory</div>
-            <div class="nav-item"><i>⚡</i>XP Boost</div>
-            <div class="nav-item"><i>👑</i>Target</div>
-            <div class="nav-item active"><i>💡</i>Independent<br>Learning</div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Compulsory
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                XP Boost
+            </div>
+            <div class="nav-item">
+                <svg viewBox="0 0 24 24"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path></svg>
+                Target
+            </div>
+            <div class="nav-item active">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="5"></circle><path d="M12 15v4m-2-4v4m4-4v4m-4 2h4"></path></svg>
+                Independent<br>Learning
+            </div>
         </nav>
 
-        <main class="content-area">
-            <div class="breadcrumb"><u>Independent learning</u> > <u>Number</u> > <b>Subtracting</b></div>
+        <main id="view-dashboard" class="content-area">
+            <div class="breadcrumb">
+                <span>Independent learning</span> > <span>Number</span> > <b>Subtracting</b>
+            </div>
+            
             <div class="topic-header">
-                <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700;">Subtracting integers <span style="color: #94a3b8; font-weight: 400;">- M347</span></h1>
-                <div class="level-badge">Level 1 <span style="color:#10b981;">✓</span> ★☆☆</div>
+                <h1 class="topic-title">Subtracting integers <span>- M347</span></h1>
+                <div class="level-badge">Level 1 <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> ★☆☆</div>
             </div>
 
-            <div class="task-container">
-                <h3 style="margin-top: 0; font-size: 1.1rem; margin-bottom: 20px;">Subtracting whole numbers</h3>
+            <div class="task-card">
+                <h3>Subtracting whole numbers</h3>
                 
                 <div class="grid-row">
-                    <div class="row-label"><i>📊</i>Introduce</div>
+                    <div class="row-icon-container">
+                        <div class="bar-icon"><div class="b1"></div><div class="b2"></div><div class="b3"></div></div>
+                        Introduce
+                    </div>
                     <div class="q-buttons">
-                        <div class="q-box q-correct" onclick="openQuestion()">Question 1<br>Correct</div>
-                        <div class="q-box q-correct" onclick="openQuestion()">Question 2<br>Correct</div>
-                        <div class="q-box q-correct" onclick="openQuestion()">Question 3<br>Correct</div>
+                        <div class="q-box q-correct" onclick="openMath()">Question 1<br>Correct</div>
+                        <div class="q-box q-correct" onclick="openMath()">Question 2<br>Correct</div>
+                        <div class="q-box q-correct" onclick="openMath()">Question 3<br>Correct</div>
+                        <div class="q-box q-correct" onclick="openMath()">Question 4<br>Correct</div>
                     </div>
                 </div>
 
                 <div class="grid-row">
-                    <div class="row-label"><i>📈</i>Strengthen</div>
-                    <div class="q-buttons">
-                        <div class="q-box q-answer" onclick="openQuestion()">Question 1<br>Answer</div>
-                        <div class="q-box q-answer" onclick="openQuestion()">Question 2<br>Answer</div>
+                    <div class="row-icon-container">
+                        <div class="bar-icon bar-icon-blue"><div class="b1"></div><div class="b2"></div><div class="b3"></div></div>
+                        Strengthen
                     </div>
+                    <div class="q-buttons">
+                        <div class="q-box q-answer" onclick="openMath()">Question 1<br>Answer</div>
+                        <div class="q-box q-answer" onclick="openMath()">Question 2<br>Answer</div>
+                        <div class="q-box q-answer" onclick="openMath()">Question 3<br>Answer</div>
+                        <div class="q-box q-answer" onclick="openMath()">Question 4<br>Answer</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <main id="view-question">
+            <div class="green-bar">
+                <div class="green-tab">1A <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <div class="green-tab">1B <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <div class="green-tab">1C <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <div class="green-tab" style="opacity: 0.8;">Summary</div>
+            </div>
+            
+            <div class="q-content">
+                <div class="bookwork-code">Bookwork code: 1A</div>
+                <h2 style="font-size: 2.2rem; font-weight: 400; margin: 0; color: var(--text-main);">Work out <span class="math-text">67 − 14</span></h2>
+                
+                <div class="ans-input" id="ans-box">Enter number</div>
+                
+                <div class="numpad">
+                    <button class="key" onclick="pressNum(7)">7</button>
+                    <button class="key" onclick="pressNum(8)">8</button>
+                    <button class="key" onclick="pressNum(9)">9</button>
+                    <button class="key" onclick="pressNum(4)">4</button>
+                    <button class="key" onclick="pressNum(5)">5</button>
+                    <button class="key" onclick="pressNum(6)">6</button>
+                    <button class="key" onclick="pressNum(1)">1</button>
+                    <button class="key" onclick="pressNum(2)">2</button>
+                    <button class="key" onclick="pressNum(3)">3</button>
+                    <button class="key" style="grid-column: span 2;" onclick="pressNum(0)">0</button>
+                    <button class="key key-submit" onclick="submitMath()"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></button>
+                </div>
+
+                <div style="width: 100%; display: flex; justify-content: flex-start; padding: 0 40px; margin-top: auto; margin-bottom: 20px;">
+                    <button onclick="closeMath()" style="background: white; border: 1px solid var(--border-light); padding: 8px 20px; border-radius: 20px; color: var(--text-main); font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg> Back
+                    </button>
                 </div>
             </div>
         </main>
     </div>
 
     <div id="vault">
-        <h2 style="color: var(--text-dark); margin-bottom: 5px;">Data Extraction Protocol</h2>
-        <div id="score-label" style="font-size: 2rem; font-weight: 700; color: var(--sparx-blue); margin-bottom: 30px;">Points: 0</div>
+        <h2 style="color: var(--text-main); margin-bottom: 5px; font-size: 1.5rem;">Data Extraction Node</h2>
+        <div id="score-label" style="font-size: 2rem; font-weight: 700; color: var(--sparx-blue); margin-bottom: 40px;">Data Points: 0</div>
         
         <div class="click-ball" onclick="doClick()">EXTRACT</div>
         
         <div style="margin-top: 20px;">
             <button class="upgrade-card" id="up1" onclick="buyUpgrade(10, 1, 0)">
-                <div><b>Manual Override</b><br><small style="color:var(--text-gray);">+1 Per Click</small></div>
+                <div><b>Manual Override</b><br><small style="color:var(--text-muted);">+1 Per Click</small></div>
                 <div style="font-weight:700; color:var(--sparx-blue);">10 Pts</div>
             </button>
             <button class="upgrade-card" id="up2" onclick="buyUpgrade(50, 0, 1)">
-                <div><b>Auto Sequence</b><br><small style="color:var(--text-gray);">+1 Per Sec</small></div>
+                <div><b>Auto Sequence</b><br><small style="color:var(--text-muted);">+1 Per Sec</small></div>
                 <div style="font-weight:700; color:var(--sparx-blue);">50 Pts</div>
             </button>
         </div>
     </div>
 
-    <div id="question-view">
-        <div class="green-bar">
-            <span>1A ✓</span><span>1B ✓</span><span style="opacity: 0.8;">Summary</span>
-        </div>
-        <div class="q-content">
-            <div class="bookwork-code">Bookwork code: 1A</div>
-            <h2 style="font-size: 2.5rem; font-weight: 400; margin: 0;">Work out <span style="font-family: serif; margin-left:5px;">67 − 14</span></h2>
-            
-            <div class="ans-input" id="ans-box">Enter number</div>
-            
-            <div class="numpad">
-                <button class="key" onclick="press(7)">7</button>
-                <button class="key" onclick="press(8)">8</button>
-                <button class="key" onclick="press(9)">9</button>
-                <button class="key" onclick="press(4)">4</button>
-                <button class="key" onclick="press(5)">5</button>
-                <button class="key" onclick="press(6)">6</button>
-                <button class="key" onclick="press(1)">1</button>
-                <button class="key" onclick="press(2)">2</button>
-                <button class="key" onclick="press(3)">3</button>
-                <button class="key" style="grid-column: span 2" onclick="press(0)">0</button>
-                <button class="key key-submit" onclick="submitAns()">✓</button>
-            </div>
-            
-            <button onclick="closeQuestion()" style="margin-top: 25px; border: 1px solid #ccc; background: white; padding: 8px 30px; border-radius: 20px; color: var(--text-gray); cursor: pointer; font-weight: 600;">Back</button>
-        </div>
-    </div>
-
     <script>
+        // CORE STATE
         let points = 0; let pClick = 1; let pSec = 0;
         let typed = ""; let currentTarget = "53";
         let nextC = 0; let nextA = 0;
 
+        const dashView = document.getElementById('view-dashboard');
+        const qView = document.getElementById('view-question');
+        const vault = document.getElementById('vault');
+
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
-        // GAME ENGINE LIVES HERE
+        // MASTERMIND TRIGGERS & LOGIC
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
 
-        // Mastermind Triggers
         window.addEventListener('keydown', (e) => {
             // SHIFT + B: Toggle Game Vault
             if (e.shiftKey && e.key.toLowerCase() === 'b') {
-                vault.style.display = (vault.style.display === 'flex') ? 'none' : 'flex';
-                document.getElementById('question-view').style.display = 'none'; // Hide math if open
+                e.preventDefault();
+                if (vault.style.display === 'flex') {
+                    vault.style.display = 'none';
+                } else {
+                    vault.style.display = 'flex';
+                    qView.style.display = 'none'; // Ensure math hides
+                }
             }
-            // ESC: Instant Panic Hide everything
+            // ESC: Panic Button (Hides vault and math, returns to dashboard)
             if (e.key === 'Escape') {
                 vault.style.display = 'none';
-                document.getElementById('question-view').style.display = 'none';
+                qView.style.display = 'none';
+                dashView.style.display = 'block';
             }
-            // ALT + S: Secret Skip Upgrade
+            // ALT + S: Secret Skip Math (Applies upgrade instantly)
             if (e.altKey && e.key.toLowerCase() === 's') { 
                 applyUp(); 
             }
         });
 
-        // Clicker Logic
+        // Clicker Engine
         function doClick() { 
             points += pClick; 
-            update(); 
+            updateUI(); 
         }
 
-        // Shop Logic
         function buyUpgrade(cost, c, a) {
             if (points >= cost) {
                 points -= cost; 
-                nextC = c; 
-                nextA = a;
-                openQuestion(); // Force the math question
+                nextC = c; nextA = a;
+                openMath(); // Force verification
             }
         }
 
         function applyUp() {
-            pClick += nextC; 
-            pSec += nextA;
+            pClick += nextC; pSec += nextA;
             nextC = 0; nextA = 0;
-            document.getElementById('question-view').style.display = 'none';
-            update();
+            qView.style.display = 'none';
+            dashView.style.display = 'block';
+            updateUI();
         }
 
-        // Math Overlay Logic
-        function openQuestion() {
-            document.getElementById('question-view').style.display = 'flex';
+        // Math Alibi Engine
+        function openMath() {
+            dashView.style.display = 'none';
+            vault.style.display = 'none';
+            qView.style.display = 'flex';
             typed = ""; 
             document.getElementById('ans-box').innerText = "Enter number";
             document.getElementById('ans-box').style.color = "#94a3b8";
         }
 
-        function press(n) {
+        function pressNum(n) {
             typed += n;
             document.getElementById('ans-box').innerText = typed;
-            document.getElementById('ans-box').style.color = "#1b3c59";
+            document.getElementById('ans-box').style.color = "var(--sparx-blue)";
         }
 
-        function submitAns() {
+        function submitMath() {
             if (typed === currentTarget) { 
                 applyUp(); 
             } else { 
@@ -250,35 +330,32 @@
             }
         }
 
-        function closeQuestion() { 
-            document.getElementById('question-view').style.display = 'none'; 
-            // If they back out without answering, refund points and cancel upgrade
+        function closeMath() { 
+            qView.style.display = 'none'; 
+            dashView.style.display = 'block';
+            // Refund points if backed out of upgrade
             if (nextC > 0 || nextA > 0) {
                 if (nextC === 1) points += 10;
                 if (nextA === 1) points += 50;
                 nextC = 0; nextA = 0;
-                update();
+                updateUI();
             }
         }
 
-        // UI Updater
-        function update() {
-            document.getElementById('score-label').innerText = "Points: " + Math.floor(points);
+        function updateUI() {
+            document.getElementById('score-label').innerText = "Data Points: " + Math.floor(points);
             document.getElementById('up1').disabled = (points < 10);
             document.getElementById('up2').disabled = (points < 50);
         }
 
-        // Auto-clicker Loop
+        // Auto Clicker Loop
         setInterval(() => { 
             if(pSec > 0) { 
                 points += pSec / 10; 
-                update(); 
+                updateUI(); 
             } 
         }, 100);
 
-        ///////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////
-        // END CORE ENGINE
         ///////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////
     </script>

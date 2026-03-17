@@ -22,12 +22,13 @@
             color: white; position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
         }
         .logo-text { font-weight: 700; font-size: 1.3rem; }
+        .banner-right { display: flex; gap: 20px; align-items: center; }
         .xp-pill { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
 
         /* MAIN PAGE LAYOUT */
         .page-wrapper { display: flex; padding-top: 50px; height: 100vh; box-sizing: border-box; }
         .sidebar { width: 240px; background: white; border-right: 1px solid #e5e7eb; padding-top: 20px; }
-        .nav-item { padding: 15px 25px; color: #4b5563; font-weight: 500; border-left: 4px solid transparent; }
+        .nav-item { padding: 15px 25px; color: #4b5563; font-weight: 500; border-left: 4px solid transparent; cursor: pointer; }
         .nav-item.active { background: #f3f4f6; color: var(--sparx-blue); border-left: 4px solid var(--sparx-blue); font-weight: 700; }
         .main-content { flex-grow: 1; padding: 40px; background: linear-gradient(135deg, #ffffff 0%, #dfecf8 100%); }
 
@@ -40,8 +41,6 @@
 
         /* CLICKER GAME UI */
         .clicker-container { display: flex; gap: 40px; width: 90%; max-width: 900px; margin-top: 20px; }
-        
-        /* Left Side: The Clicker */
         .click-area {
             flex: 1; background: #f0f7ff; border: 2px dashed var(--sparx-blue);
             border-radius: 20px; display: flex; flex-direction: column;
@@ -55,7 +54,6 @@
         }
         .data-circle:active { transform: scale(0.95); }
 
-        /* Right Side: Shop */
         .shop-area { width: 300px; }
         .upgrade-btn {
             width: 100%; background: white; border: 1px solid #e5e7eb;
@@ -65,23 +63,18 @@
         .upgrade-btn:hover:not(:disabled) { border-color: var(--sparx-blue); background: #f0f7ff; }
         .upgrade-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .upgrade-btn h4 { margin: 0; color: var(--sparx-blue); }
-        .upgrade-btn p { margin: 5px 0 0; font-size: 0.8rem; color: #6b7280; }
 
-        /* MATH MODAL overlay */
+        /* MATH MODAL */
         #math-overlay {
-            position: absolute; inset: 0; background: rgba(255,255,255,0.98);
+            position: fixed; inset: 50px 0 0 0; background: rgba(255,255,255,0.98);
             display: none; flex-direction: column; align-items: center; justify-content: center;
             z-index: 10001;
         }
         .math-box {
             background: white; border: 2px solid var(--sparx-blue);
             padding: 40px; border-radius: 20px; text-align: center; width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        #math-input {
-            width: 100px; padding: 10px; font-size: 1.5rem; text-align: center;
-            border: 2px solid #e5e7eb; border-radius: 10px; margin-top: 20px;
-        }
+        #math-input { width: 120px; padding: 10px; font-size: 1.5rem; text-align: center; border: 2px solid #e5e7eb; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -95,10 +88,15 @@
     </header>
 
     <div class="page-wrapper">
-        <aside class="sidebar"><div class="nav-item active">Compulsory</div></aside>
+        <aside class="sidebar">
+            <div class="nav-item active">Compulsory</div>
+            <div class="nav-item">XP Boost</div>
+            <div class="nav-item">Target</div>
+            <div class="nav-item" onclick="startMath('alibi')">Independent Learning</div>
+        </aside>
         <main class="main-content">
             <h1>Hey O-B,</h1>
-            <div style="background: white; padding: 20px; border-radius:12px; border-left: 8px solid var(--success-green);">
+            <div style="background: white; padding: 20px; border-radius:12px; border-left: 8px solid var(--success-green); box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                 Homework due Tuesday 24th March 7pm — <b>Completed ✓</b>
             </div>
         </main>
@@ -113,7 +111,6 @@
                 <p style="margin-top: 20px; color: #64748b;">Manual plot value: <span id="click-val">1</span></p>
                 <p style="color: #64748b;">Automated Rate: <span id="auto-val">0</span>/sec</p>
             </div>
-
             <div class="shop-area">
                 <h3 style="margin-top: 0;">System Upgrades</h3>
                 <button class="upgrade-btn" id="up-1" onclick="buyUpgrade(10, 1, 0)">
@@ -126,41 +123,51 @@
                 </button>
             </div>
         </div>
+    </div>
 
-        <div id="math-overlay">
-            <div class="math-box">
-                <h2 style="color:var(--sparx-blue)">Verification Required</h2>
-                <p>Complete 10 math validations to apply system upgrade.</p>
-                <p style="font-weight: bold; color: #64748b;">Progress: <span id="math-progress">1</span>/10</p>
-                <div id="question-text" style="font-size: 2rem; margin: 20px 0;">12 + 5 = ?</div>
-                <input type="number" id="math-input" autofocus onkeydown="if(event.key==='Enter') checkAnswer()">
-            </div>
-            <p style="color: #cbd5e1; margin-top: 20px; font-size: 10px;">Security Patch: v4.2.0</p>
+    <div id="math-overlay">
+        <div class="math-box">
+            <h2 id="math-title" style="color:var(--sparx-blue)">Verification Required</h2>
+            <p id="math-desc">Complete 10 math validations.</p>
+            <p style="font-weight: bold; color: #64748b;">Progress: <span id="math-progress">1</span>/10</p>
+            <div id="question-text" style="font-size: 2rem; margin: 20px 0; font-weight:bold;">12 + 5 = ?</div>
+            <input type="number" id="math-input" autofocus onkeydown="if(event.key==='Enter') checkAnswer()">
+            <p style="font-size: 12px; color: #94a3b8; margin-top: 20px;">Press Enter to submit answer.</p>
         </div>
     </div>
 
     <script>
+        // GLOBAL STATE
         let dataPoints = 0;
         let pointsPerClick = 1;
         let pointsPerSec = 0;
-        
-        let mathTarget = 10;
+        let pendingClick = 0;
+        let pendingAuto = 0;
+        let mathMode = "upgrade"; // "upgrade" or "alibi"
+
         let mathCount = 0;
         let currentAns = 0;
 
         const vault = document.getElementById('vault');
         const overlay = document.getElementById('math-overlay');
 
-        // TRIGGER: SHIFT + B
+        ///////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////
+        // THE GAME LOGIC LIVES HERE
+        ///////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////
+
         window.addEventListener('keydown', (e) => {
             if (e.shiftKey && e.key.toLowerCase() === 'b') {
                 vault.style.display = (vault.style.display === 'flex') ? 'none' : 'flex';
             }
-            if (e.key === 'Escape') vault.style.display = 'none';
-
-            // --- THE SKIP FEATURE: Alt + S ---
+            if (e.key === 'Escape') {
+                vault.style.display = 'none';
+                overlay.style.display = 'none';
+            }
+            // THE SKIP FEATURE: Alt + S
             if (e.altKey && e.key.toLowerCase() === 's') {
-                closeMath();
+                applyUpgrade();
             }
         });
 
@@ -172,19 +179,25 @@
         function buyUpgrade(cost, addClick, addAuto) {
             if (dataPoints >= cost) {
                 dataPoints -= cost;
-                // Temporarily store the stats to apply after math
                 pendingClick = addClick;
                 pendingAuto = addAuto;
-                startMath();
+                startMath('upgrade');
             }
         }
 
-        let pendingClick = 0;
-        let pendingAuto = 0;
-
-        function startMath() {
+        function startMath(mode) {
+            mathMode = mode;
             mathCount = 1;
             overlay.style.display = 'flex';
+            
+            if(mode === 'alibi') {
+                document.getElementById('math-title').innerText = "Independent Learning";
+                document.getElementById('math-desc').innerText = "Module: Advanced Arithmetic Trials";
+            } else {
+                document.getElementById('math-title').innerText = "Verification Required";
+                document.getElementById('math-desc').innerText = "Complete 10 validations to apply upgrade.";
+            }
+            
             genQuestion();
         }
 
@@ -203,7 +216,8 @@
             if (val === currentAns) {
                 mathCount++;
                 if (mathCount > 10) {
-                    applyUpgrade();
+                    if(mathMode === 'upgrade') applyUpgrade();
+                    else overlay.style.display = 'none';
                 } else {
                     genQuestion();
                 }
@@ -213,10 +227,8 @@
         function applyUpgrade() {
             pointsPerClick += pendingClick;
             pointsPerSec += pendingAuto;
-            closeMath();
-        }
-
-        function closeMath() {
+            pendingClick = 0;
+            pendingAuto = 0;
             overlay.style.display = 'none';
             updateUI();
         }
@@ -230,7 +242,7 @@
             document.getElementById('up-2').disabled = (dataPoints < 50);
         }
 
-        // Auto-clicker loop
+        // Auto-clicker engine
         setInterval(() => {
             if (pointsPerSec > 0) {
                 dataPoints += pointsPerSec / 10;
@@ -239,6 +251,12 @@
         }, 100);
 
         updateUI();
+
+        ///////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////
+        // END OF GAME LOGIC
+        ///////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////
     </script>
 </body>
 </html>

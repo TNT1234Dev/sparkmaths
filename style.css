@@ -1,86 +1,55 @@
 :root {
     --sparx-purple: #4c1d95;
-    --sparx-light-purple: #6d28d9;
-    --sparx-bg: #f9fafb;
-    --text-dark: #1f2937;
+    --sparx-blue-bg: #dfecf8;
     --success-green: #27ce88;
 }
 
-body {
-    margin: 0;
-    font-family: 'DM Sans', sans-serif;
-    background-color: var(--sparx-bg);
-    color: var(--text-dark);
-}
+body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: #f9fafb; overflow: hidden; }
 
+/* Header */
 .top-banner {
     background: var(--sparx-purple);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 40px;
-    align-items: center;
-    height: 50px;
+    display: flex; justify-content: space-between;
+    padding: 10px 25px; align-items: center; height: 45px;
 }
+.sparx-logo { width: 130px; }
+.banner-right { color: white; display: flex; gap: 20px; font-weight: 500; }
 
-.fake-logo { font-weight: 700; font-size: 1.2rem; }
-
-.banner-right { display: flex; gap: 20px; align-items: center; }
-
-.xp-display { font-weight: 500; }
-
-.page-layout { display: flex; }
-
+/* Layout */
+.page-container { display: flex; }
 .sidebar {
-    width: 260px;
-    background: white;
-    height: calc(100vh - 70px);
-    border-right: 1px solid #e5e7eb;
-    padding: 20px 0;
+    width: 240px; height: 100vh; background: white;
+    border-right: 1px solid #e5e7eb; padding-top: 20px;
+}
+.nav-btn {
+    width: 100%; padding: 15px 25px; border: none; background: none;
+    text-align: left; font-size: 0.95rem; color: #4b5563; cursor: pointer;
+}
+.nav-btn.active {
+    background: #f3f4f6; color: var(--sparx-purple);
+    border-left: 4px solid var(--sparx-purple); font-weight: bold;
 }
 
-.nav-item {
-    width: 100%;
-    padding: 15px 25px;
-    border: none;
-    background: none;
-    text-align: left;
-    font-size: 1rem;
-    cursor: pointer;
-    color: #4b5563;
-}
-
-.nav-item.active {
-    background: #f3f4f6;
-    color: var(--sparx-purple);
-    border-left: 4px solid var(--sparx-purple);
-    font-weight: 700;
-}
-
+/* Content */
 .main-content {
-    flex-grow: 1;
-    padding: 40px;
-    background: linear-gradient(135deg, #ffffff 0%, #dfecf8 100%);
+    flex-grow: 1; padding: 40px;
+    background: linear-gradient(135deg, #ffffff 0%, var(--sparx-blue-bg) 100%);
+}
+.welcome-box h1 { font-size: 1.8rem; color: #111827; }
+.task-card {
+    background: white; border-radius: 10px; padding: 20px;
+    border-left: 6px solid var(--success-green); box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.task-item {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    border-left: 8px solid var(--success-green);
-    margin-bottom: 15px;
+/* THE VAULT */
+#vault {
+    position: fixed; inset: 0; background: white; z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-
-/* STEALTH CLASSES */
+#volume-warning { text-align: center; border: 2px solid var(--sparx-purple); padding: 30px; border-radius: 15px; }
+#confirm-vol { background: var(--sparx-purple); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; margin-top: 15px; }
 .hidden { display: none !important; }
 
-#stealth-vault {
-    position: fixed;
-    inset: 0;
-    background: white;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* Game Style */
+.game-header { background: var(--sparx-purple); color: white; width: 400px; padding: 10px; text-align: center; font-weight: bold; }
+#gameCanvas { background: #f3f4f6; border: 2px solid var(--sparx-purple); }

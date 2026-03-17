@@ -8,53 +8,57 @@
     
     <style>
         :root {
-            --sparx-blue: #00609b;
-            --sparx-light-blue: #dfecf8;
+            --sparx-blue: #0073bb; /* Exact Sparx Blue */
+            --sparx-dark: #1b3c59;
+            --sparx-bg: #f9fafb;
             --success-green: #27ce88;
-            --text-dark: #1f2937;
-            --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
 
-        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: #ffffff; color: var(--text-dark); overflow: hidden; }
+        body { margin: 0; font-family: 'DM Sans', sans-serif; background-color: var(--sparx-bg); overflow: hidden; }
 
-        /* DASHBOARD UI */
+        /* THE PERMANENT TOP BAR */
         .top-banner {
-            background: var(--sparx-blue); height: 50px; display: flex;
-            justify-content: space-between; align-items: center; padding: 0 25px; color: white;
+            background: var(--sparx-blue);
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            color: white;
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 10000; /* Higher than the vault */
         }
         .logo-text { font-weight: 700; font-size: 1.3rem; }
         .banner-right { display: flex; gap: 20px; align-items: center; }
-        .xp-pill { background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
-        
-        .page-wrapper { display: flex; height: calc(100vh - 50px); }
-        .sidebar { width: 250px; border-right: 1px solid #e5e7eb; padding-top: 20px; }
-        .nav-item { padding: 14px 25px; color: #4b5563; font-weight: 500; cursor: pointer; border-left: 4px solid transparent; }
+        .xp-pill { background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
+
+        /* MAIN PAGE LAYOUT */
+        .page-wrapper { display: flex; padding-top: 50px; height: 100vh; box-sizing: border-box; }
+        .sidebar { width: 240px; background: white; border-right: 1px solid #e5e7eb; padding-top: 20px; }
+        .nav-item { padding: 15px 25px; color: #4b5563; font-weight: 500; border-left: 4px solid transparent; }
         .nav-item.active { background: #f3f4f6; color: var(--sparx-blue); border-left: 4px solid var(--sparx-blue); font-weight: 700; }
         
-        .main-content { flex-grow: 1; padding: 40px; background: linear-gradient(135deg, #ffffff 0%, var(--sparx-light-blue) 100%); }
-        .task-card { background: white; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; border-left: 8px solid var(--success-green); box-shadow: var(--card-shadow); }
+        .main-content { flex-grow: 1; padding: 40px; background: linear-gradient(135deg, #ffffff 0%, #dfecf8 100%); }
+        .task-card { background: white; border-radius: 12px; padding: 20px; display: flex; justify-content: space-between; border-left: 8px solid var(--success-green); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
 
-        /* STEALTH VAULT & MENU */
+        /* THE VAULT (Starts below the Top Bar) */
         #vault {
-            position: fixed; inset: 0; background: white; z-index: 9999;
-            display: none; flex-direction: column; align-items: center; padding-top: 50px;
+            position: fixed; top: 50px; bottom: 0; left: 0; right: 0;
+            background: white; z-index: 9999;
+            display: none; flex-direction: column; align-items: center; padding-top: 40px;
         }
-        .vault-header { color: var(--sparx-blue); text-align: center; margin-bottom: 40px; }
-        
-        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 80%; max-width: 800px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 80%; max-width: 800px; margin-top: 30px; }
         .game-card {
-            background: white; border: 2px solid #e5e7eb; border-radius: 15px; padding: 20px;
+            background: white; border: 2px solid #e5e7eb; border-radius: 15px; padding: 25px;
             cursor: pointer; transition: 0.2s; text-align: center;
         }
-        .game-card:hover { border-color: var(--sparx-blue); transform: translateY(-3px); box-shadow: var(--card-shadow); }
+        .game-card:hover { border-color: var(--sparx-blue); transform: translateY(-2px); }
         .game-card h3 { color: var(--sparx-blue); margin: 0 0 10px 0; }
-        .game-card p { font-size: 0.85rem; color: #6b7280; }
 
-        /* GAME CONTAINER */
+        /* GAME STYLES */
         #game-container { display: none; flex-direction: column; align-items: center; }
-        canvas { background: #e1eaf2; border: 3px solid var(--sparx-blue); border-radius: 8px; }
-        .btn { background: var(--sparx-blue); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        .hidden { display: none !important; }
+        canvas { background: #eef2f5; border: 3px solid var(--sparx-blue); border-radius: 8px; cursor: crosshair; }
+        .sim-header { color: var(--sparx-blue); font-weight: 700; margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -64,7 +68,7 @@
         <div class="banner-right">
             <div class="xp-pill">18,226 XP</div>
             <div class="student-name">O-B Cross</div>
-            <div class="menu-btn" style="border: 1px solid white; padding: 3px 10px; border-radius: 5px; font-size: 12px;">Menu</div>
+            <div style="border: 1px solid white; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Menu</div>
         </div>
     </header>
 
@@ -76,8 +80,8 @@
             <div class="nav-item">Independent Learning</div>
         </aside>
         <main class="main-content">
-            <h1>Hey O-B,</h1>
-            <p>Answer every question correctly to complete your homework.</p>
+            <h1 style="font-size: 2rem;">Hey O-B,</h1>
+            <p style="color: #6b7280; margin-bottom: 30px;">This is your personalised Compulsory homework.</p>
             <div class="task-card">
                 <span style="font-weight:600">Homework due Tuesday 24th March 7pm</span>
                 <span style="color:var(--success-green); font-weight:700">Completed ✓</span>
@@ -87,122 +91,115 @@
 
     <div id="vault">
         <div id="menu-screen">
-            <div class="vault-header">
-                <h1>Advanced Learning Modules</h1>
-                <p>Select a simulation to begin independent study.</p>
-            </div>
+            <h1 style="color: var(--sparx-blue); text-align:center;">Learning Simulations</h1>
             <div class="menu-grid">
-                <div class="game-card" onclick="startJumper()">
+                <div class="game-card" onclick="launchSim()">
                     <h3>Spatial Trajectory</h3>
-                    <p>Module 4.2: Gravity and physics-based velocity calculation.</p>
+                    <p>Physics-based velocity and gravity calculation module.</p>
                 </div>
-                <div class="game-card" style="opacity:0.6; cursor:not-allowed;">
-                    <h3>Logic Flow</h3>
-                    <p>Coming Soon: Algorithmic pathfinding modules.</p>
+                <div class="game-card" style="opacity: 0.5;">
+                    <h3>Vector Tracking</h3>
+                    <p>Coming Soon: High-speed coordinate plotting.</p>
                 </div>
             </div>
-            <center><button class="btn" onclick="toggleVault()" style="margin-top:50px; background:#6b7280;">Exit Modules</button></center>
         </div>
 
         <div id="game-container">
-            <h2 id="game-title" style="color:var(--sparx-blue)">Spatial Trajectory Simulation</h2>
+            <div class="sim-header">Simulation 4.2: Gravity Response</div>
             <canvas id="gameCanvas" width="400" height="500"></canvas>
-            <div style="display:flex; gap:10px;">
-                <button class="btn" onclick="showMenu()" style="background:#6b7280;">Back to Menu</button>
-                <button class="btn" onclick="toggleVault()">Panic Exit (ESC)</button>
-            </div>
+            <p style="color: #94a3b8; font-size: 12px; margin-top: 15px;">Module Active: Interaction recorded.</p>
         </div>
     </div>
 
-  <script>
-    const vault = document.getElementById('vault');
-    const menuScreen = document.getElementById('menu-screen');
-    const gameContainer = document.getElementById('game-container');
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    <script>
+        const vault = document.getElementById('vault');
+        const menu = document.getElementById('menu-screen');
+        const container = document.getElementById('game-container');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
-    // --- DIAGNOSTIC: REMOVE THIS ONCE WORKING ---
-    console.log("Stealth System Initialized. Press Shift + B to open.");
-
-    window.addEventListener('keydown', (e) => {
-        // We use .toLowerCase() to make sure 'b' or 'B' both work
-        if (e.shiftKey && e.key.toLowerCase() === 'b') {
-            e.preventDefault();
-            console.log("Trigger Detected: Opening Vault...");
-            toggleVault();
-        }
-        
-        // Instant Panic Close
-        if (e.key === 'Escape') {
-            vault.style.display = 'none';
-        }
-    });
-
-    function toggleVault() {
-        // If it's hidden, show it. If shown, hide it.
-        if (vault.style.display === 'flex') {
-            vault.style.display = 'none';
-        } else {
-            vault.style.display = 'flex';
-            showMenu();
-        }
-    }
-
-    function showMenu() {
-        menuScreen.style.display = 'block';
-        gameContainer.style.display = 'none';
-        gameRunning = false;
-    }
-
-    function startJumper() {
-        menuScreen.style.display = 'none';
-        gameContainer.style.display = 'flex';
-        resetGame();
-        if(!loopActive) gameLoop();
-    }
-
-    // --- MATHS JUMPER ENGINE ---
-    let birdY, velocity, pipes, score, gameRunning = false, loopActive = false;
-    
-    function resetGame() {
-        birdY = 250; velocity = 0; score = 0; pipes = [{ x: 400, gap: 200 }];
-        gameRunning = true;
-    }
-
-    window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' || e.code === 'Numpad5') velocity = -5;
-    });
-
-    function gameLoop() {
-        loopActive = true;
-        if (!gameRunning || vault.style.display === 'none') {
-            requestAnimationFrame(gameLoop);
-            return;
-        }
-
-        velocity += 0.25; birdY += velocity;
-        ctx.clearRect(0,0,400,500);
-
-        ctx.fillStyle = '#00609b';
-        ctx.beginPath(); ctx.arc(50, birdY, 12, 0, Math.PI*2); ctx.fill();
-
-        ctx.fillStyle = '#94a3b8';
-        pipes.forEach((p, i) => {
-            p.x -= 2;
-            ctx.fillRect(p.x, 0, 50, p.gap);
-            ctx.fillRect(p.x, p.gap + 150, 50, 500);
-            if(p.x === 50) score++;
-            if(p.x < -50) pipes.splice(i, 1);
-            if(50 > p.x && 50 < p.x+50 && (birdY < p.gap || birdY > p.gap+150)) resetGame();
+        // TRIGGER: SHIFT + B
+        window.addEventListener('keydown', (e) => {
+            if (e.shiftKey && e.key.toLowerCase() === 'b') {
+                e.preventDefault();
+                vault.style.display = (vault.style.display === 'flex') ? 'none' : 'flex';
+                menu.style.display = 'block';
+                container.style.display = 'none';
+            }
+            if (e.key === 'Escape') {
+                vault.style.display = 'none';
+                gameRunning = false;
+            }
         });
 
-        if(pipes[pipes.length-1].x < 220) pipes.push({ x: 400, gap: Math.random()*250 + 50 });
-        if(birdY > 500 || birdY < 0) resetGame();
+        function launchSim() {
+            menu.style.display = 'none';
+            container.style.display = 'flex';
+            initPhysics();
+            if(!loopActive) gameLoop();
+        }
 
-        ctx.fillStyle = '#00609b'; ctx.font = 'bold 16px sans-serif';
-        ctx.fillText('Efficiency: ' + score + '%', 20, 30);
-        requestAnimationFrame(gameLoop);
-    }
-</script>
+        // --- REAL PHYSICS ENGINE ---
+        let birdY, velocity, pipes, score, gameRunning = false, loopActive = false;
+        const gravity = 0.12; // Lowered for "Good Physics"
+        const jump = -3.8;    // Snappy but smooth
+        const pipeSpeed = 1.8;
+
+        function initPhysics() {
+            birdY = 250; velocity = 0; score = 0;
+            pipes = [{ x: 450, gap: 200 }];
+            gameRunning = true;
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'Numpad5') {
+                velocity = jump;
+            }
+        });
+
+        function gameLoop() {
+            loopActive = true;
+            if (!gameRunning || vault.style.display === 'none') {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            // Physics Logic
+            velocity += gravity;
+            birdY += velocity;
+
+            ctx.clearRect(0,0,400,500);
+
+            // Draw "Data Point" (Ball)
+            ctx.fillStyle = '#0073bb';
+            ctx.beginPath(); ctx.arc(60, birdY, 12, 0, Math.PI*2); ctx.fill();
+
+            // Draw "Boundaries" (Pipes)
+            ctx.fillStyle = '#cbd5e1';
+            pipes.forEach((p, i) => {
+                p.x -= pipeSpeed;
+                // Top
+                ctx.fillRect(p.x, 0, 50, p.gap);
+                // Bottom
+                ctx.fillRect(p.x, p.gap + 160, 50, 500);
+
+                if(p.x === 60) score++;
+                if(p.x < -60) pipes.splice(i, 1);
+
+                // Collision Detection
+                if(60 + 10 > p.x && 60 - 10 < p.x + 50) {
+                    if(birdY - 10 < p.gap || birdY + 10 > p.gap + 160) initPhysics();
+                }
+            });
+
+            if(pipes[pipes.length-1].x < 220) pipes.push({ x: 400, gap: Math.random()*250 + 50 });
+            if(birdY > 500 || birdY < 0) initPhysics();
+
+            // Stealth Score
+            ctx.fillStyle = '#0073bb'; ctx.font = 'bold 16px DM Sans';
+            ctx.fillText('Precision: ' + score + '%', 20, 35);
+            requestAnimationFrame(gameLoop);
+        }
+    </script>
 </body>
 </html>

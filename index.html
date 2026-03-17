@@ -1911,7 +1911,6 @@ bottom: 0;
         text-align: center; font-weight: bold; border-radius: 10px 10px 0 0;
     }
     #gameCanvas { background: #e1eaf2; border: 3px solid #00609b; border-top: none; }
-    .hidden { display: none !important; }
 </style>
 
 <div id="vault">
@@ -1924,27 +1923,25 @@ bottom: 0;
     <div id="game-screen">
         <div class="game-header">Module 204: Trajectory Simulation</div>
         <canvas id="gameCanvas" width="400" height="600"></canvas>
-        <button class="stealth-btn" onclick="closeVault()">Return to Task</button>
+        <p style="color: #666; font-size: 12px; margin-top: 10px;">Press [ESC] to return to homework.</p>
     </div>
 </div>
 
 <script>
-let sequence = [];
-const secret = ['6', 'RCtrl', 'F8', 'w', 'w'];
 const vault = document.getElementById('vault');
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
+// --- THE NEW TRIGGER: LEFT CTRL + EQUALS ---
 window.addEventListener('keydown', (e) => {
-    let key = e.key;
-    if (key === 'Control' && e.location === 2) key = 'RCtrl';
-    if (key === 'Escape') closeVault();
-
-    sequence.push(key);
-    if (sequence.length > secret.length) sequence.shift();
-    if (JSON.stringify(sequence) === JSON.stringify(secret)) {
+    // e.location === 1 is Left Ctrl
+    // e.key === '=' is the equals key
+    if (e.ctrlKey && e.location === 1 && e.key === '=') {
+        e.preventDefault(); // Prevents the browser from zooming in
         vault.style.display = 'flex';
     }
+
+    if (key === 'Escape') closeVault();
 });
 
 function startSimulation() {
@@ -1968,6 +1965,7 @@ function resetGame() {
 }
 
 window.addEventListener('keydown', (e) => {
+    // Using space or the number pad to play
     if (e.code === 'Space' || e.code === 'Numpad5') velocity = -5;
 });
 
@@ -1982,11 +1980,11 @@ function gameLoop() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw "Variable" (The Player)
+    // Draw Bird (The blue variable)
     ctx.fillStyle = '#00609b';
     ctx.beginPath(); ctx.arc(50, birdY, 12, 0, Math.PI * 2); ctx.fill();
 
-    // Draw "Bar Charts" (The Pipes)
+    // Draw Bar Charts (The obstacles)
     ctx.fillStyle = '#78909c';
     pipes.forEach((p, i) => {
         p.x -= 2;
@@ -2002,7 +2000,6 @@ function gameLoop() {
 
     if (birdY > canvas.height || birdY < 0) resetGame();
     
-    // Check for collision with pipes
     pipes.forEach(p => {
         if (50 + 10 > p.x && 50 - 10 < p.x + 50) {
             if (birdY - 10 < p.gap || birdY + 10 > p.gap + 160) resetGame();

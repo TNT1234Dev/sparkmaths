@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparkLearning | Student Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app-root">
+        <header class="top-banner">
+            <div class="banner-left">
+                <div class="fake-logo">SparkLearning</div>
+            </div>
+            <div class="banner-right">
+                <div class="xp-display">18,226 XP</div>
+                <div class="student-name">O-B Cross</div>
+                <div class="menu-btn">Menu ☰</div>
+            </div>
+        </header>
+
+        <div class="page-layout">
+            <aside class="sidebar">
+                <nav>
+                    <button class="nav-item active">Compulsory</button>
+                    <button class="nav-item">XP Boost</button>
+                    <button class="nav-item">Target</button>
+                    <button class="nav-item">Independent Learning</button>
+                </nav>
+            </aside>
+
+            <main class="main-content">
+                <div class="welcome-header">
+                    <h1>Hey O-B,</h1>
+                    <p>This is your personalised Compulsory homework. Answer every question correctly to complete it.</p>
+                </div>
+
+                <div class="task-accordion">
+                    <div class="task-item completed">
+                        <div class="task-info">
+                            <span class="due-date">Homework due Tuesday 24th March 7pm</span>
+                            <span class="status-chip">Completed ✓</span>
+                        </div>
+                    </div>
+                    </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="stealth-vault" class="hidden">
+        <div id="volume-check">
+            <h2>⚠️ AUDIO CHECK</h2>
+            <p>Ensure volume is muted or headphones are connected.</p>
+            <button id="start-btn">Verify & Continue</button>
+        </div>
+        <div id="game-container" class="hidden">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
